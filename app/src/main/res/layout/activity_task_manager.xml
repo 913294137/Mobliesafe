@@ -69,6 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="killProcess"
             android:background="@drawable/button_green_selector"
             android:text="清理" />
 
@@ -77,6 +78,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="openSetting"
             android:background="@drawable/button_green_selector"
             android:text="设置" />
 

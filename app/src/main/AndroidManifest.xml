@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sumu.mobliesafe">
+    package="com.sumu.mobliesafe" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,22 +19,23 @@
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.SplashActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity">
+        <activity android:name=".activity.HomeActivity" >
             <intent-filter>
                 <action android:name="aaa.bbb.ccc" />
 
@@ -51,13 +52,13 @@
         <activity android:name=".activity.AToolsActivity" />
         <activity android:name=".activity.AddressActivity" />
 
-        <receiver android:name=".receiver.BootCompleteReceiver">
+        <receiver android:name=".receiver.BootCompleteReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.SmsReceiver">
-            <intent-filter android:priority="2147483647">
+        <receiver android:name=".receiver.SmsReceiver" >
+            <intent-filter android:priority="2147483647" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -68,7 +69,7 @@
             android:name=".receiver.AdminReceiver"
             android:description="@string/sample_device_admin_description"
             android:label="@string/sample_device_admin"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_sample" />
@@ -104,7 +105,9 @@
             android:exported="true" />
 
         <activity android:name=".activity.AppManagerActivity" />
-        <activity android:name=".activity.TaskManagerActivity"/>
+        <activity android:name=".activity.TaskManagerActivity" />
+        <activity android:name=".activity.TaskManagerSettingActivity" >
+        </activity>
     </application>
 
 </manifest>

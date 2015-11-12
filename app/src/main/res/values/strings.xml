@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Mobliesafe</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="sample_device_admin_description">激活后可以执行锁屏和删除数据操作</string>
+    <string name="sample_device_admin">安全卫士设备管理</string>
+    <string name="title_activity_call_safe">CallSafeActivity</string>
+    <string name="title_activity_app_manager">AppManagerActivity</string>
+</resources>

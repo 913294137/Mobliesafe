@@ -39,5 +39,6 @@
         android:layout_height="match_parent"
         android:focusable="false"
         android:clickable="false"
+        android:button="@drawable/btn_check"
         android:gravity="center"/>
 </LinearLayout>

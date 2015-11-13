@@ -28,6 +28,9 @@ import com.sumu.mobliesafe.utils.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 进程管理界面
+ */
 public class TaskManagerActivity extends Activity {
     @ViewInject(R.id.tv_task_process_count)
     private TextView tvTaskProessCount;
@@ -69,6 +72,9 @@ public class TaskManagerActivity extends Activity {
                 Object itemAtPosition = listView.getItemAtPosition(position);
                 if (itemAtPosition != null && itemAtPosition instanceof TaskInfo) {
                     TaskInfo taskInfo = (TaskInfo) itemAtPosition;
+                    if (taskInfo.getPackageName().equals(getPackageName())) {
+                        return;//如果是本程序则直接返回
+                    }
                     ViewHolder holder = (ViewHolder) view.getTag();
                     if (holder.cbAppStatus.isChecked()) {
                         holder.cbAppStatus.setChecked(false);
@@ -85,7 +91,7 @@ public class TaskManagerActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (adapter!=null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
@@ -135,7 +141,11 @@ public class TaskManagerActivity extends Activity {
      */
     public void selectAll(View view) {
         for (TaskInfo taskInfo : userTaskInfos) {
-            taskInfo.setCheck(true);
+            if (taskInfo.getPackageName().equals(getPackageName())) {
+                taskInfo.setCheck(false);//如果是本程序则设置不勾选
+            } else {
+                taskInfo.setCheck(true);
+            }
         }
         for (TaskInfo taskInfo : systemTaskInfos) {
             taskInfo.setCheck(true);
@@ -152,7 +162,11 @@ public class TaskManagerActivity extends Activity {
     public void selectOppsite(View view) {
         for (TaskInfo taskInfo : userTaskInfos) {
             //取反，选中则变为未选中，未选中则变为选中
-            taskInfo.setCheck(!taskInfo.isCheck());
+            if (taskInfo.getPackageName().equals(getPackageName())) {
+                taskInfo.setCheck(false);//如果是本程序则设置不勾选
+            } else {
+                taskInfo.setCheck(!taskInfo.isCheck());
+            }
         }
         for (TaskInfo taskInfo : systemTaskInfos) {
             taskInfo.setCheck(!taskInfo.isCheck());
@@ -207,18 +221,19 @@ public class TaskManagerActivity extends Activity {
         adapter.notifyDataSetChanged();
         ToastUtils.showToast(TaskManagerActivity.this, "共清理了" + totalCount + "个进程,释放了"
                 + Formatter.formatFileSize(TaskManagerActivity.this, killMen) + "内存");
-        tvTaskProessCount.setText("运行中进程:" + (processCount-totalCount) + "个");
-        tvTaskMemory.setText("剩余/总内存:" + Formatter.formatFileSize(TaskManagerActivity.this, (availMem+killMen)) + "/"
+        tvTaskProessCount.setText("运行中进程:" + (processCount - totalCount) + "个");
+        tvTaskMemory.setText("剩余/总内存:" + Formatter.formatFileSize(TaskManagerActivity.this, (availMem + killMen)) + "/"
                 + Formatter.formatFileSize(TaskManagerActivity.this, totalMem));
         initData();
     }
 
     /**
      * 设置界面
+     *
      * @param view
      */
-    public void openSetting(View view){
-        Intent intent=new Intent(TaskManagerActivity.this,TaskManagerSettingActivity.class);
+    public void openSetting(View view) {
+        Intent intent = new Intent(TaskManagerActivity.this, TaskManagerSettingActivity.class);
         startActivity(intent);
     }
 
@@ -227,10 +242,10 @@ public class TaskManagerActivity extends Activity {
 
         @Override
         public int getCount() {
-            if (preferences.getBoolean("is_show_system",false)){
-                return userTaskInfos.size()+1+systemTaskInfos.size()+1;
-            }else {
-                return userTaskInfos.size()+1;
+            if (preferences.getBoolean("is_show_system", false)) {
+                return userTaskInfos.size() + 1 + systemTaskInfos.size() + 1;
+            } else {
+                return userTaskInfos.size() + 1;
             }
         }
 
@@ -243,7 +258,7 @@ public class TaskManagerActivity extends Activity {
             if (position < (userTaskInfos.size() + 1)) {
                 taskInfo = userTaskInfos.get(position - 1);
             } else if (position > (userTaskInfos.size() + 1)) {
-                    taskInfo = systemTaskInfos.get(position - userTaskInfos.size() - 2);
+                taskInfo = systemTaskInfos.get(position - userTaskInfos.size() - 2);
 
             }
             return taskInfo;
@@ -282,12 +297,19 @@ public class TaskManagerActivity extends Activity {
                 convertView.setTag(viewHolder);
             }
             TaskInfo taskInfo = (TaskInfo) getItem(position);
-            if (taskInfo!=null) {
+            if (taskInfo != null) {
                 viewHolder.ivAppIcon.setImageDrawable(taskInfo.getIcon());
                 viewHolder.tvAppName.setText(taskInfo.getAppName());
                 viewHolder.tvAppMemorySize.setText("占用内存:" + Formatter.formatFileSize(TaskManagerActivity.this, taskInfo.getMemorySize()));
                 viewHolder.cbAppStatus.setChecked(taskInfo.isCheck());
+                //将本程序进程勾选框隐藏
+                if (taskInfo.getPackageName().equals(getPackageName())) {
+                    viewHolder.cbAppStatus.setVisibility(View.INVISIBLE);
+                } else {
+                    viewHolder.cbAppStatus.setVisibility(View.VISIBLE);
+                }
             }
+
             return convertView;
         }
     }

@@ -15,7 +15,7 @@ public class AddressDao {
         String address = "未知号码";
         //获取数据库对象
         SQLiteDatabase database = SQLiteDatabase.openDatabase(PATH, null, SQLiteDatabase.OPEN_READONLY);
-        if (number.matches("^1[3-8]\\d{9}$")) {//匹配手机号码
+        if (number.matches("^1[3-8]\\d{8}$")) {//匹配手机号码
             Cursor cursor = database.rawQuery("select location from data2 where id=(select outkey from data1 where id=?)", new String[]{number.substring(0, 7)});
             if (cursor.moveToNext()) {
                 address = cursor.getString(0);

@@ -60,6 +60,7 @@ public class HomeActivity extends Activity {
                     case 4:
                         break;
                     case 5:
+                        startActivity(new Intent(HomeActivity.this,AntivirusActivity.class));
                         break;
                     case 6:
                         break;

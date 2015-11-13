@@ -88,7 +88,8 @@ public class SplashActivity extends Activity {
         tvProgress= (TextView) findViewById(R.id.tv_progress);
         tvVersion.setText("版本号：" + getVersionName());
         preferences=getSharedPreferences("config",MODE_APPEND);
-        copyDB("address.db");
+        copyDB("address.db");//拷贝电话归属地数据库
+        copyDB("antivirus.db");//拷贝病毒数据库
         //判断是否需要自动更新
         if (preferences.getBoolean("auto_update",true)){
             checkVersion();

@@ -130,6 +130,8 @@
 
         <activity android:name=".activity.AntivirusActivity" >
         </activity>
+        <activity android:name=".activity.AppLockActivity" >
+        </activity>
     </application>
 
 </manifest>

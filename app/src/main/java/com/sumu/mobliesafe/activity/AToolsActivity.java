@@ -31,6 +31,14 @@ public class AToolsActivity extends Activity{
     }
 
     /**
+     * 程序锁
+     * @param view
+     */
+    public void appLock(View view){
+        startActivity(new Intent(this, AppLockActivity.class));
+    }
+
+    /**
      * 短信备份
      * @param view
      */

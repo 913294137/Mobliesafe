@@ -36,4 +36,18 @@
         android:text="短信备份"
         android:textColor="@color/black"
         android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_green_selector"
+        android:clickable="true"
+        android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:onClick="appLock"
+        android:text="程序锁"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 </LinearLayout>

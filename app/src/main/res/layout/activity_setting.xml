@@ -58,4 +58,13 @@
         itheima:desc_on="黑名单已开启"
         itheima:setting_title="黑名单开关设置">
     </com.sumu.mobliesafe.view.SettingItemView>
+
+    <com.sumu.mobliesafe.view.SettingItemView
+        android:id="@+id/siv_lock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        itheima:desc_off="程序锁已关闭"
+        itheima:desc_on="程序锁已开启"
+        itheima:setting_title="程序锁开关设置">
+    </com.sumu.mobliesafe.view.SettingItemView>
 </LinearLayout>

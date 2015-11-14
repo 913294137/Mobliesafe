@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,10 @@ import java.util.List;
 public class AppLockDao {
 
     private AppLockOpenHelper helper;
-
+    private Context context;
     public AppLockDao(Context context) {
         helper = new AppLockOpenHelper(context);
+        this.context=context;
     }
 
     /**
@@ -41,6 +43,8 @@ public class AppLockDao {
             result = true;
         }
         db.close();
+        //自定义一个内容观察者
+        context.getContentResolver().notifyChange(Uri.parse("content://com.sumu.mobliesafe.db.change"),null);
         return result;
     }
 
@@ -58,6 +62,8 @@ public class AppLockDao {
             result = true;
         }
         db.close();
+        //自定义一个内容观察者
+        context.getContentResolver().notifyChange(Uri.parse("content://com.sumu.mobliesafe.db.change"), null);
         return result;
     }
 

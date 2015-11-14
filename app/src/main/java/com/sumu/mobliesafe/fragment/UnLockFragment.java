@@ -49,8 +49,8 @@ public class UnLockFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_un_lock, container, false);
-        listView= (ListView) view.findViewById(R.id.list_view);
-        tvAppNumber= (TextView) view.findViewById(R.id.tv_app_number);
+        listView = (ListView) view.findViewById(R.id.list_view);
+        tvAppNumber = (TextView) view.findViewById(R.id.tv_app_number);
         return view;
     }
 
@@ -63,7 +63,7 @@ public class UnLockFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 appInfos = AppInfoParser.getAppInfos(getActivity());
@@ -74,7 +74,7 @@ public class UnLockFragment extends Fragment {
                 unLockAppInfos = new ArrayList<AppInfo>();
                 for (AppInfo appInfo : appInfos) {
                     // 判断当前的应用是否在程序锁的数据里面
-                    if (!dao.find(appInfo.getApkPackageName())){
+                    if (!dao.find(appInfo.getApkPackageName())) {
                         // 如果查询不到说明没有在程序锁的数据库里面
                         unLockAppInfos.add(appInfo);
                     }
@@ -89,11 +89,11 @@ public class UnLockFragment extends Fragment {
         }.start();
     }
 
-    private class UnLockAdapter extends BaseAdapter{
+    private class UnLockAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            tvAppNumber.setText("未加锁("+unLockAppInfos.size()+")个");
+            tvAppNumber.setText("未加锁(" + unLockAppInfos.size() + ")个");
             return unLockAppInfos.size();
         }
 
@@ -109,21 +109,21 @@ public class UnLockFragment extends Fragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder=null;
+            ViewHolder viewHolder = null;
             final AppInfo appInfo;
             final View view;
-            if (convertView==null){
-                view=View.inflate(getActivity(),R.layout.item_unlock,null);
-                viewHolder=new ViewHolder();
-                viewHolder.ivIcon= (ImageView) view.findViewById(R.id.iv_icon);
-                viewHolder.tvName= (TextView) view.findViewById(R.id.tv_name);
-                viewHolder.ivLock= (ImageView) view.findViewById(R.id.iv_lock);
+            if (convertView == null) {
+                view = View.inflate(getActivity(), R.layout.item_unlock, null);
+                viewHolder = new ViewHolder();
+                viewHolder.ivIcon = (ImageView) view.findViewById(R.id.iv_icon);
+                viewHolder.tvName = (TextView) view.findViewById(R.id.tv_name);
+                viewHolder.ivLock = (ImageView) view.findViewById(R.id.iv_lock);
                 view.setTag(viewHolder);
-            }else {
-                view=convertView;
-                viewHolder= (ViewHolder) view.getTag();
+            } else {
+                view = convertView;
+                viewHolder = (ViewHolder) view.getTag();
             }
-            appInfo= (AppInfo) getItem(position);
+            appInfo = (AppInfo) getItem(position);
             viewHolder.ivIcon.setImageDrawable(appInfo.getIcon());
             viewHolder.tvName.setText(appInfo.getApkName());
             viewHolder.ivLock.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +133,8 @@ public class UnLockFragment extends Fragment {
                     boolean result = dao.addLockApp(appInfo.getApkPackageName());
                     if (result) {
                         // 初始化一个位移动画
-                        Animation animation=new TranslateAnimation(Animation.RELATIVE_TO_SELF,0f,Animation.RELATIVE_TO_SELF,1.0f
-                                ,Animation.RELATIVE_TO_SELF,0f,Animation.RELATIVE_TO_SELF,0f);
+                        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 1.0f
+                                , Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
                         animation.setDuration(500);
                         animation.setAnimationListener(new Animation.AnimationListener() {
                             @Override
@@ -162,7 +162,7 @@ public class UnLockFragment extends Fragment {
         }
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         ImageView ivIcon;
         TextView tvName;
         ImageView ivLock;

@@ -2,6 +2,8 @@ package com.sumu.mobliesafe.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +61,10 @@ public class LockFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ViewUtils.inject(getActivity());
+        adapter = new LockAdapter();
+        // 初始化一个加锁的集合
+        LockAppInfos = new ArrayList<AppInfo>();
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -68,27 +74,29 @@ public class LockFragment extends Fragment {
             @Override
             public void run() {
                 appInfos = AppInfoParser.getAppInfos(getActivity());
-                adapter = new LockAdapter();
                 // 获取到程序锁的dao
                 dao = new AppLockDao(getActivity());
-                // 初始化一个加锁的集合
-                LockAppInfos = new ArrayList<AppInfo>();
                 for (AppInfo appInfo : appInfos) {
                     // 判断当前的应用是否在程序锁的数据里面
                     if (dao.find(appInfo.getApkPackageName())) {
                         // 如果查询到说明在程序锁的数据库里面
-                        LockAppInfos.add(appInfo);
+                        Message.obtain(mHandler,0,appInfo).sendToTarget();
                     }
                 }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listView.setAdapter(adapter);
-                    }
-                });
             }
         }.start();
     }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.obj != null && msg.obj instanceof AppInfo) {
+                LockAppInfos.add((AppInfo) msg.obj);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    };
+
 
     private class LockAdapter extends BaseAdapter {
 

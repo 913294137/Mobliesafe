@@ -2,6 +2,8 @@ package com.sumu.mobliesafe.bean;
 
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
+
 /**
  * ==============================
  * 作者：苏幕
@@ -13,7 +15,7 @@ import android.graphics.drawable.Drawable;
  * <p/>
  * ==============================
  */
-public class TaskInfo {
+public class TaskInfo implements Serializable{
     //进程图标
     private Drawable icon;
     //进程包名
@@ -26,6 +28,7 @@ public class TaskInfo {
     private boolean userApp;
     //判断当前进程是否被选中
     private boolean check;
+
 
     public boolean isCheck() {
         return check;

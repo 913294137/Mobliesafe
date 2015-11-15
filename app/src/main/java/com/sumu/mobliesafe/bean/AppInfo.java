@@ -2,10 +2,12 @@ package com.sumu.mobliesafe.bean;
 
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
+
 /**
  * Created by Sumu on 2015/11/10.
  */
-public class AppInfo {
+public class AppInfo implements Serializable{
     //图片的icon
     private Drawable icon;
     //程序的名字
@@ -18,6 +20,16 @@ public class AppInfo {
     private boolean isRom;
     //包名
     private String apkPackageName;
+    //应用程序的uid号
+    private int uid;
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 
     @Override
     public String toString() {

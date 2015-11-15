@@ -35,6 +35,9 @@ public class AppInfoParser {
             //获取到应用的名字
             String apkName = installedPackage.applicationInfo.loadLabel(packageManager).toString();
             appInfo.setApkName(apkName);
+            //获取到应用的uid
+            int uid = installedPackage.applicationInfo.uid;
+            appInfo.setUid(uid);
             //获取到应用的包名
             String packageName = installedPackage.packageName;
             appInfo.setApkPackageName(packageName);

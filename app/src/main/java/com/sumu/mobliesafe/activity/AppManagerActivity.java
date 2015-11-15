@@ -51,6 +51,7 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
     private List<AppInfo> systemAppInfos;
     private PopupWindow popupWindow;
     private AppInfo appInfoClick;
+    private AppManagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,12 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
                 }
             }
         });
+        //用户程序的集合
+        userAppInfos = new ArrayList<AppInfo>();
+        //系统程序的集合
+        systemAppInfos = new ArrayList<AppInfo>();
+        adapter = new AppManagerAdapter();
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -146,13 +153,25 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
             popupWindow=null;
         }
     }
+    private static final int USER_APP_INFO=0;
+    private static final int UN_USER_APP_INFO=1;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            AppManagerAdapter adapter = new AppManagerAdapter();
-            listView.setAdapter(adapter);
+            switch (msg.what){
+                case USER_APP_INFO:
+                    if (msg.obj!=null && msg.obj instanceof AppInfo){
+                        userAppInfos.add((AppInfo) msg.obj);
+                    }
+                    break;
+                case UN_USER_APP_INFO:
+                    if (msg.obj!=null && msg.obj instanceof AppInfo){
+                        systemAppInfos.add((AppInfo) msg.obj);
+                    }
+                    break;
+            }
+            adapter.notifyDataSetChanged();
         }
     };
 
@@ -163,20 +182,14 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
                 //获取所以安装到手机上面的应用
                 appInfos = AppInfoParser.getAppInfos(AppManagerActivity.this);
                 //appInfos拆成 用户程序的集合 + 系统程序的集合
-
-                //用户程序的集合
-                userAppInfos = new ArrayList<AppInfo>();
-                //系统程序的集合
-                systemAppInfos = new ArrayList<AppInfo>();
                 for (AppInfo appInfo : appInfos) {
                     if (appInfo.isUserApp()) {
                         //用户程序
-                        userAppInfos.add(appInfo);
+                        Message.obtain(mHandler,USER_APP_INFO,appInfo).sendToTarget();
                     } else {
-                        systemAppInfos.add(appInfo);
+                        Message.obtain(mHandler,UN_USER_APP_INFO,appInfo).sendToTarget();
                     }
                 }
-                mHandler.sendEmptyMessage(0);
             }
         }.start();
     }

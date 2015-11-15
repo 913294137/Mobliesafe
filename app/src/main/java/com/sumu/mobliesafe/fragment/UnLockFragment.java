@@ -1,6 +1,8 @@
 package com.sumu.mobliesafe.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,10 @@ public class UnLockFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ViewUtils.inject(getActivity());
+        // 初始化一个没有加锁的集合
+        unLockAppInfos = new ArrayList<AppInfo>();
+        adapter = new UnLockAdapter();
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -67,29 +73,31 @@ public class UnLockFragment extends Fragment {
             @Override
             public void run() {
                 appInfos = AppInfoParser.getAppInfos(getActivity());
-                adapter = new UnLockAdapter();
                 // 获取到程序锁的dao
                 dao = new AppLockDao(getActivity());
-                // 初始化一个没有加锁的集合
-                unLockAppInfos = new ArrayList<AppInfo>();
                 for (AppInfo appInfo : appInfos) {
                     // 判断当前的应用是否在程序锁的数据里面
                     if (!dao.find(appInfo.getApkPackageName())) {
                         // 如果查询不到说明没有在程序锁的数据库里面
-                        unLockAppInfos.add(appInfo);
+                        Message.obtain(mHandler, 0, appInfo).sendToTarget();
                     }
                 }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listView.setAdapter(adapter);
-                    }
-                });
             }
         }.start();
     }
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.obj != null && msg.obj instanceof AppInfo) {
+                unLockAppInfos.add((AppInfo) msg.obj);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    };
+
     private class UnLockAdapter extends BaseAdapter {
+
 
         @Override
         public int getCount() {

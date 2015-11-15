@@ -9,7 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp" />
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="金山卫士"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="20sp" />
 

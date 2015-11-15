@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,10 @@ public class TaskManagerActivity extends Activity {
      */
     private void initUI() {
         initTextView();
+        userTaskInfos = new ArrayList<>();
+        systemTaskInfos = new ArrayList<>();
+        adapter = new TaskManagerAdapter();
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -107,32 +113,44 @@ public class TaskManagerActivity extends Activity {
         tvTaskMemory.setText("剩余/总内存:" + Formatter.formatFileSize(TaskManagerActivity.this, availMem) + "/"
                 + Formatter.formatFileSize(TaskManagerActivity.this, totalMem));
     }
+    private static final int USER_TASK_INFO=0;
+    private static final int UN_USER_TASK_INFO=1;
 
     private void initData() {
         new Thread() {
             @Override
             public void run() {
                 taskInfos = TaskInfoParser.getTaskInfos(TaskManagerActivity.this);
-                userTaskInfos = new ArrayList<>();
-                systemTaskInfos = new ArrayList<>();
                 for (TaskInfo taskInfo : taskInfos) {
                     if (taskInfo.isUserApp()) {
-                        userTaskInfos.add(taskInfo);
+                        Message.obtain(mHandler,USER_TASK_INFO,taskInfo).sendToTarget();
                     } else {
-                        systemTaskInfos.add(taskInfo);
+                        Message.obtain(mHandler,UN_USER_TASK_INFO,taskInfo).sendToTarget();
                     }
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter = new TaskManagerAdapter();
-                        listView.setAdapter(adapter);
-                        initTextView();
-                    }
-                });
             }
         }.start();
     }
+
+    private Handler mHandler =new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case USER_TASK_INFO:
+                    if (msg.obj!=null && msg.obj instanceof TaskInfo) {
+                        userTaskInfos.add((TaskInfo) msg.obj);
+                    }
+                    break;
+                case UN_USER_TASK_INFO:
+                    if (msg.obj!=null && msg.obj instanceof TaskInfo) {
+                        systemTaskInfos.add((TaskInfo) msg.obj);
+                    }
+                    break;
+            }
+            adapter.notifyDataSetChanged();
+            initTextView();
+        }
+    };
 
     /**
      * 全选

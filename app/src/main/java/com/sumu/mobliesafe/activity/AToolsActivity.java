@@ -2,14 +2,19 @@ package com.sumu.mobliesafe.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Toast;
 
 import com.sumu.mobliesafe.R;
 import com.sumu.mobliesafe.utils.SmsUtils;
 import com.sumu.mobliesafe.utils.ToastUtils;
+
+import net.youmi.android.listener.Interface_ActivityListener;
+import net.youmi.android.offers.OffersManager;
 
 /**
  * Created by Sumu on 2015/11/8.
@@ -20,6 +25,28 @@ public class AToolsActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atools);
+    }
+
+    /**
+     * 软件推荐
+     * @param view
+     */
+    public void software(View view){
+        // 调用方式一：直接打开全屏积分墙
+        // OffersManager.getInstance(this).showOffersWall();
+
+        // 调用方式二：直接打开全屏积分墙，并且监听积分墙退出的事件onDestory
+        OffersManager.getInstance(this).showOffersWall(new Interface_ActivityListener() {
+
+            /**
+             * 当积分墙销毁的时候，即积分墙的Activity调用了onDestory的时候回调
+             */
+            @Override
+            public void onActivityDestroy(Context context) {
+                Toast.makeText(context, "全屏积分墙退出了", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /**

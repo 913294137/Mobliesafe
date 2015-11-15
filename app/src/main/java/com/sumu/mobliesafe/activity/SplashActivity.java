@@ -27,6 +27,8 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.sumu.mobliesafe.R;
 import com.sumu.mobliesafe.utils.StreamUtils;
 
+import net.youmi.android.AdManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,6 +86,9 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        //初始化有米广告
+        AdManager.getInstance(this).init("48cdfb9d2ba36f47", "8c53e53914fb688a",false);
+
         tvVersion = (TextView) findViewById(R.id.tv_version);
         tvProgress= (TextView) findViewById(R.id.tv_progress);
         tvVersion.setText("版本号：" + getVersionName());
